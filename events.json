@@ -1,0 +1,107 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Ignacio Doe",
+      "image": "https://global-uploads.webflow.com/5eecfecbe625d195e35b89f2/624bfb093da7d92733c001c0_Ignacio%20Villafruela%20Rodr%C3%ADguez.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Jane Bennett",
+      "image": "https://global-uploads.webflow.com/5eecfecbe625d195e35b89f2/624bfb401d7131c760ca1c63_Elieska%20Lensink.jpg"
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "createdBy": 1,
+      "title": "Trampoline party",
+      "description": "Bounce around with your friends",
+      "image": "https://i.pinimg.com/736x/3d/2f/af/3d2faf4e3188d34a9fcdc00df59e77b0.jpg",
+      "categoryIds": [
+        2
+      ],
+      "location": "My back yard",
+      "startTime": "2023-03-10T18:00",
+      "endTime": "2023-03-10T17:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "createdBy": 1,
+      "title": "Laser Tag mania",
+      "description": "Let's play laser tag!",
+      "image": "https://www.ctvnews.ca/polopoly_fs/1.5118552.1600965663!/httpImage/image.jpg_gen/derivatives/landscape_1020/image.jpg",
+      "categoryIds": [
+        2
+      ],
+      "location": "Blinded by the Lights Laser Tag, 15 Main St.",
+      "startTime": "2023-04-06T18:46",
+      "endTime": "2023-04-06T17:46"
+    },
+    {
+      "id": 3,
+      "createdBy": 2,
+      "title": "Badminton game",
+      "description": "Hit that shuttle!",
+      "image": "https://s3.eu-west-2.amazonaws.com/ws-activestirling/production/Badminton/_1200x630_crop_center-center_none/Badminton-3.jpg",
+      "categoryIds": [
+        1,
+        2
+      ],
+      "location": "The Park",
+      "startTime": "2023-03-15T12:00:00.000Z",
+      "endTime": "2023-03-15T13:30:00.000Z"
+    },
+    {
+      "id": 4,
+      "createdBy": 2,
+      "title": "Yoga",
+      "description": "It's a bit of a stretch.",
+      "image": "https://ymcasouthflorida.org/wp-content/uploads/2019/12/AA2I8910-scaled.jpg",
+      "categoryIds": [
+        3
+      ],
+      "location": "Shavasana Yoga School",
+      "startTime": "2023-03-09T06:00:00.000Z",
+      "endTime": "2023-03-09T07:00:00.000Z"
+    },
+    {
+      "title": "Bouldering",
+      "description": "Lets go Bouldering",
+      "image": "https://media.gettyimages.com/id/987687146/nl/foto/sportieve-volwassen-man-klimmuur-in-sportschool.jpg?s=612x612&w=gi&k=20&c=3qAhXn1nIoBBMcQMWjA4qR5ybEISCI5KRWY11j_0tPk=",
+      "categoryIds": [
+        1
+      ],
+      "location": "Hoofddorp",
+      "startTime": "2024-01-11T18:00",
+      "endTime": "2024-01-11T20:00",
+      "id": 5
+    },
+    {
+      "title": "CrossFit",
+      "description": "CrossFit Class",
+      "image": "data:image/jpeg;base64,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",
+      "categoryIds": [
+        1
+      ],
+      "location": "Hoofddorp",
+      "startTime": "2024-01-19T18:00",
+      "endTime": "2024-01-19T19:00",
+      "id": 6
+    }
+  ],
+  "categories": [
+    {
+      "name": "sports",
+      "id": 1
+    },
+    {
+      "name": "games",
+      "id": 2
+    },
+    {
+      "name": "relaxation",
+      "id": 3
+    }
+  ]
+}
