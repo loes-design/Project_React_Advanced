@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Heading,
-  List,
   Input,
   Select,
   Button,
@@ -18,6 +17,7 @@ import {
   FormControl,
   Text,
   Box,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
@@ -37,6 +37,8 @@ export const EventsPage = () => {
     startTime: "",
     endTime: "",
   });
+
+  const [userData, setUserData] = useState([]);
 
   const fetchEvents = async () => {
     try {
@@ -65,9 +67,25 @@ export const EventsPage = () => {
       // Handle error state if needed
     }
   };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/users");
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+      const userData = await response.json();
+      setUserData(userData);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      // Handle error state if needed
+    }
+  };
+
   useEffect(() => {
     fetchEvents();
     fetchCategories();
+    fetchUsers();
   }, []);
 
   const getCategoryName = (categoryIds, categories) => {
@@ -120,12 +138,49 @@ export const EventsPage = () => {
 
   const handleAddEvent = async () => {
     try {
+      // Check if user exists
+      let userExists = false;
+      let userId = null;
+
+      // Check if user already exists
+      const existingUser = userData.find(
+        (user) => user.name === newEvent.userName
+      );
+      if (existingUser) {
+        userExists = true;
+        userId = existingUser.id;
+      }
+
+      // If user does not exist, prompt for image URL
+      if (!userExists && newEvent.userName) {
+        const userImage = newEvent.userImage;
+
+        // Add new user to the server
+        const newUserResponse = await fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: newEvent.userName,
+            image: userImage || "", // Set empty string if no image URL provided
+          }),
+        });
+
+        if (!newUserResponse.ok) {
+          throw new Error("Failed to add new user");
+        }
+
+        const newUser = await newUserResponse.json();
+        userId = newUser.id;
+      }
+
       const response = await fetch("http://localhost:3000/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newEvent),
+        body: JSON.stringify({ ...newEvent, createdBy: userId }),
       });
 
       if (!response.ok) {
@@ -142,17 +197,19 @@ export const EventsPage = () => {
   };
 
   return (
-    <div>
+    <Box p={4} m={5}>
       <Heading>List of Events</Heading>
       <Input
         placeholder="Search events"
         value={searchTerm}
         onChange={handleSearch}
+        m={1}
       />
       <Select
         placeholder="Filter by category"
         value={selectedCategory}
         onChange={handleCategoryChange}
+        m={1}
       >
         <option value="">All Categories</option>
         {categories.map((category) => (
@@ -161,7 +218,7 @@ export const EventsPage = () => {
           </option>
         ))}
       </Select>
-      <List>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} m={10} spacing={20}>
         {events
           .filter((event) =>
             event.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -178,7 +235,7 @@ export const EventsPage = () => {
               <strong>Description:</strong> {event.description}
               <br />
               <strong>Image:</strong>{" "}
-              <img src={event.image} alt="Event" width="100" />
+              <img src={event.image} alt="Event" width="200" />
               <br />
               <strong>Start Time:</strong>{" "}
               {new Date(event.startTime).toLocaleString()}
@@ -190,11 +247,41 @@ export const EventsPage = () => {
               {categories.length > 0 &&
                 getCategoryName(event.categoryIds, categories).join(", ")}
               <br />
+              <br />
+              <strong>Location:</strong> {event.location}
+              <br />
               {/* Other event details... */}
             </Link>
           ))}
-      </List>
-      <Button onClick={openAddEventModal}>Add New Event</Button>
+      </SimpleGrid>
+      <Button
+        onClick={() => {
+          const userName = prompt("Your name:");
+          if (userName) {
+            setNewEvent((prevEvent) => ({
+              ...prevEvent,
+              userName: userName,
+            }));
+
+            // Check if user already exists
+            const existingUser = userData.find(
+              (user) => user.name === userName
+            );
+            if (!existingUser) {
+              const userImage = prompt("User image URL (optional):");
+              setNewEvent((prevEvent) => ({
+                ...prevEvent,
+                userImage: userImage || "", // Set empty string if no image URL provided
+              }));
+            }
+
+            openAddEventModal();
+          }
+        }}
+        m={4}
+      >
+        Add New Event
+      </Button>
 
       {/* Modal for adding a new event */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -270,7 +357,7 @@ export const EventsPage = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </Box>
   );
 };
 
